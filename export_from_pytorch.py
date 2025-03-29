@@ -5,6 +5,10 @@ from torch.autograd import Variable
 import torchvision
 from torchvision import datasets, models, transforms
 
+# 安全なグローバルとしてultralyticsのSegmentationModelを追加
+from ultralytics.nn.tasks import SegmentationModel
+torch.serialization.add_safe_globals([SegmentationModel])
+
 # 変換対象の.ptファイルのパスを実行後に入力
 pt_path = input("変換対象の.ptファイルのパスを入力してください: ")
 vgg16 = torch.load(pt_path)
