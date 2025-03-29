@@ -11,7 +11,18 @@ torch.serialization.add_safe_globals([SegmentationModel])
 
 # 変換対象の.ptファイルのパスを実行後に入力
 pt_path = input("変換対象の.ptファイルのパスを入力してください: ")
-vgg16 = torch.load(pt_path)
+loaded_obj = torch.load(pt_path)
+if isinstance(loaded_obj, dict):
+    if 'model' in loaded_obj:
+        vgg16 = loaded_obj['model']
+    elif 'state_dict' in loaded_obj:
+        vgg16 = SegmentationModel()
+        vgg16.load_state_dict(loaded_obj['state_dict'])
+    else:
+        raise ValueError("Checkpoint format is not recognized.")
+else:
+    vgg16 = loaded_obj
+
 vgg16.eval()
 
 x = Variable(torch.randn(1, 3, 224, 224))
