@@ -9,6 +9,12 @@ from torchvision import datasets, models, transforms
 from ultralytics.nn.tasks import SegmentationModel
 torch.serialization.add_safe_globals([SegmentationModel])
 
+# onnxモジュールがインストールされているかチェック
+try:
+    import onnx
+except ImportError as e:
+    raise ImportError("Module onnx is not installed! Please install it using 'pip install onnx'") from e
+
 # 変換対象の.ptファイルのパスを実行後に入力
 pt_path = input("変換対象の.ptファイルのパスを入力してください: ")
 loaded_obj = torch.load(pt_path)
@@ -23,7 +29,7 @@ if isinstance(loaded_obj, dict):
 else:
     vgg16 = loaded_obj
 
-# Half型とFloat型の不一致を防ぐため、明示的にfloat型にキャスト
+# <user__selection>Half型とFloat型の不一致を防ぐため、明示的にfloat型にキャスト</user__selection>
 vgg16 = vgg16.float()
 vgg16.eval()
 
