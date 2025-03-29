@@ -23,6 +23,8 @@ if isinstance(loaded_obj, dict):
 else:
     vgg16 = loaded_obj
 
+# Half型とFloat型の不一致を防ぐため、明示的にfloat型にキャスト
+vgg16 = vgg16.float()
 vgg16.eval()
 
 x = Variable(torch.randn(1, 3, 224, 224))
